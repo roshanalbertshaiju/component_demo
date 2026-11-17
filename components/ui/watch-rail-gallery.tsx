@@ -4,7 +4,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { X, Sparkles, Check, ChevronRight, ShieldCheck } from "lucide-react";
 
-export type WatchStandTheme = "nero-marquina" | "cognac-leather" | "brushed-platinum";
+export type WatchStandTheme = "nero-marquina" | "cognac-leather" | "brushed-platinum" | "walnut-vines";
 
 export interface HorologySpecs {
   calibre?: string;
@@ -40,314 +40,117 @@ export interface WatchRailHeroProps extends React.ComponentProps<"section"> {
   onOpenChange?: (index: number | null) => void;
 }
 
+const STAND_ASSETS: Record<
+  WatchStandTheme,
+  {
+    image: string;
+    plaqueTop: string;
+    plaqueHeight: string;
+    plaqueWidth: string;
+    brandColor: string;
+    refColor: string;
+    textShadow: string;
+  }
+> = {
+  "nero-marquina": {
+    image: "/watches/stands/stand-nero-marquina.png",
+    plaqueTop: "74.8%",
+    plaqueHeight: "8.5%",
+    plaqueWidth: "33%",
+    brandColor: "#221603",
+    refColor: "#422E0C",
+    textShadow: "0 1px 0 rgba(255, 238, 195, 0.45)",
+  },
+  "cognac-leather": {
+    image: "/watches/stands/stand-cognac-leather.png",
+    plaqueTop: "75.0%",
+    plaqueHeight: "8.5%",
+    plaqueWidth: "38%",
+    brandColor: "#221503",
+    refColor: "#422D0A",
+    textShadow: "0 1px 0 rgba(255, 240, 205, 0.45)",
+  },
+  "brushed-platinum": {
+    image: "/watches/stands/stand-brushed-platinum.png",
+    plaqueTop: "75.2%",
+    plaqueHeight: "6.8%",
+    plaqueWidth: "51%",
+    brandColor: "#181A1D",
+    refColor: "#3E434D",
+    textShadow: "0 1px 0 rgba(255, 255, 255, 0.7)",
+  },
+  "walnut-vines": {
+    image: "/watches/stands/stand-walnut-vines.png",
+    plaqueTop: "73.8%",
+    plaqueHeight: "9.2%",
+    plaqueWidth: "34%",
+    brandColor: "#201402",
+    refColor: "#402B08",
+    textShadow: "0 1px 0 rgba(255, 240, 205, 0.45)",
+  },
+};
+
 /**
- * Architectural Swiss Boutique Display Module (Plinth, Alcantara Cushion, & Recessed Plaque)
+ * Photorealistic Swiss Vitrine Pedestal Display Module
+ * Authentic Alcantara Cushion, Turned Column, Grounded Solid Plinth, & Laser-Engraved Plaque
  */
-function LuxuryBoutiqueStandSVG({
-  uid,
+function LuxuryBoutiqueStand({
   theme,
   brand,
   reference,
   active,
 }: {
-  uid: string;
   theme: WatchStandTheme;
   brand: string;
   reference?: string;
   active: boolean;
 }) {
+  const config = STAND_ASSETS[theme] ?? STAND_ASSETS["nero-marquina"];
+
   return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 280 440"
-      className="pointer-events-none absolute inset-0 size-full overflow-visible"
-    >
-      <defs>
-        {/* Contact Shadow on the Vitrine Shelf */}
-        <filter id={`${uid}-ground-shadow`} x="-40%" y="-40%" width="180%" height="200%">
-          <feGaussianBlur in="SourceAlpha" stdDeviation={active ? "9" : "6"} />
-          <feColorMatrix type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.65 0" />
-        </filter>
-
-        {/* Nero Marquina Marble Polished Gradients */}
-        <linearGradient id={`${uid}-marble-bevel`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#35383F" />
-          <stop offset="25%" stopColor="#25272C" />
-          <stop offset="100%" stopColor="#141518" />
-        </linearGradient>
-
-        <linearGradient id={`${uid}-marble-face`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#1E2024" />
-          <stop offset="10%" stopColor="#121316" />
-          <stop offset="90%" stopColor="#0A0B0D" />
-          <stop offset="100%" stopColor="#040405" />
-        </linearGradient>
-
-        {/* Cognac Saddle Leather Cushion Gradient */}
-        <linearGradient id={`${uid}-leather-cushion`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#4A2A1A" />
-          <stop offset="50%" stopColor="#31190E" />
-          <stop offset="100%" stopColor="#1C0D07" />
-        </linearGradient>
-
-        {/* Brushed Gold / Brass Plaque */}
-        <linearGradient id={`${uid}-brass-plaque`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#8A6321" />
-          <stop offset="28%" stopColor="#ECCB73" />
-          <stop offset="50%" stopColor="#FFF4D0" />
-          <stop offset="72%" stopColor="#D9A842" />
-          <stop offset="100%" stopColor="#734D13" />
-        </linearGradient>
-
-        {/* Brushed Platinum Plinth */}
-        <linearGradient id={`${uid}-platinum-face`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#C8CCD4" />
-          <stop offset="8%" stopColor="#878C96" />
-          <stop offset="88%" stopColor="#41444A" />
-          <stop offset="100%" stopColor="#2A2C30" />
-        </linearGradient>
-
-        {/* Alcantara Dark Charcoal Cushion */}
-        <radialGradient id={`${uid}-alcantara`} cx="50%" cy="40%" r="65%">
-          <stop offset="0%" stopColor="#2C2E35" />
-          <stop offset="60%" stopColor="#1B1C20" />
-          <stop offset="100%" stopColor="#0E0F12" />
-        </radialGradient>
-      </defs>
-
-      {/* 1. GROUND CONTACT SHADOW */}
-      <ellipse
-        cx="140"
-        cy="406"
-        rx={active ? "96" : "84"}
-        ry="14"
-        filter={`url(#${uid}-ground-shadow)`}
-        opacity={active ? "0.85" : "0.6"}
-        className="transition-all duration-300"
+    <div className="pointer-events-none absolute inset-0 size-full select-none">
+      {/* 1. Photorealistic 3D Stand Render */}
+      <img
+        src={config.image}
+        alt={`${brand} Luxury Watch Stand`}
+        draggable={false}
+        className="pointer-events-none absolute inset-0 size-full select-none object-contain transition-all duration-500"
+        style={{
+          filter: active
+            ? "drop-shadow(0 24px 30px rgba(0,0,0,0.58)) drop-shadow(0 4px 10px rgba(0,0,0,0.3))"
+            : "drop-shadow(0 14px 18px rgba(0,0,0,0.38))",
+        }}
       />
 
-      {/* 2. THE ALCANTARA / LEATHER WATCH PILLOW (Embraces the watch from behind) */}
-      <g className="transition-transform duration-300">
-        {/* Pillow Base Form */}
-        <rect
-          x="75"
-          y="110"
-          width="130"
-          height="195"
-          rx="52"
-          fill={theme === "cognac-leather" ? `url(#${uid}-leather-cushion)` : `url(#${uid}-alcantara)`}
-          stroke="#000000"
-          strokeWidth="1.5"
-        />
-
-        {/* Cushion Highlight Rim */}
-        <rect
-          x="77"
-          y="112"
-          width="126"
-          height="191"
-          rx="50"
-          fill="none"
-          stroke="#FFFFFF"
-          strokeOpacity={theme === "cognac-leather" ? "0.15" : "0.08"}
-          strokeWidth="1.2"
-        />
-
-        {/* Saddle Stitching on Leather theme */}
-        {theme === "cognac-leather" && (
-          <rect
-            x="81"
-            y="116"
-            width="118"
-            height="183"
-            rx="46"
-            fill="none"
-            stroke="#D9A377"
-            strokeOpacity="0.45"
-            strokeWidth="0.9"
-            strokeDasharray="4 2.8"
-          />
-        )}
-
-        {/* Recessed Center Groove where the watch case is seated */}
-        <ellipse cx="140" cy="205" rx="52" ry="72" fill="#060608" fillOpacity="0.65" filter="blur(3px)" />
-
-        {/* Lower Pillow Support Cradle */}
-        <path
-          d="M84,286 C100,308 180,308 196,286 L194,320 C182,330 98,330 86,320 Z"
-          fill={theme === "brushed-platinum" ? `url(#${uid}-platinum-face)` : "#121316"}
-          stroke="#000000"
-          strokeWidth="1"
-        />
-
-        {/* Architectural Pedestal Stem Collar connecting cushion directly to plinth */}
-        <path
-          d="M96,318 L184,318 L194,349 L86,349 Z"
-          fill={
-            theme === "brushed-platinum"
-              ? `url(#${uid}-platinum-face)`
-              : theme === "cognac-leather"
-              ? `url(#${uid}-leather-cushion)`
-              : `url(#${uid}-marble-bevel)`
-          }
-          stroke="#0A0B0D"
-          strokeWidth="0.8"
-        />
-        {/* Upper collar rim highlight */}
-        <line
-          x1="97"
-          y1="319"
-          x2="183"
-          y2="319"
-          stroke={theme === "cognac-leather" ? "#D9A377" : "#FFFFFF"}
-          strokeOpacity="0.4"
-          strokeWidth="1"
-        />
-        {/* Lower plinth landing edge shadow */}
-        <line x1="86" y1="348.5" x2="194" y2="348.5" stroke="#000000" strokeOpacity="0.6" strokeWidth="1.2" />
-      </g>
-
-      {/* 3. SOLID BEVELED BASE PLINTH */}
-      <g>
-        {theme === "brushed-platinum" ? (
-          // Platinum Display Ingot
-          <g>
-            <polygon
-              points="48,348 232,348 240,364 40,364"
-              fill={`url(#${uid}-platinum-face)`}
-              stroke="#5E636E"
-              strokeWidth="0.8"
-            />
-            <line x1="49" y1="349" x2="231" y2="349" stroke="#FFFFFF" strokeWidth="1.2" />
-            <rect x="40" y="364" width="200" height="38" fill="#1E2024" stroke="#0B0C0E" strokeWidth="1" />
-          </g>
-        ) : theme === "cognac-leather" ? (
-          // Leather-Bound Luxury Block
-          <g>
-            <polygon
-              points="50,350 230,350 238,362 42,362"
-              fill={`url(#${uid}-leather-cushion)`}
-              stroke="#1C0D07"
-              strokeWidth="1"
-            />
-            <line x1="51" y1="351" x2="229" y2="351" stroke="#E2B18A" strokeOpacity="0.4" strokeWidth="1" />
-            <rect x="42" y="362" width="196" height="40" rx="2" fill={`url(#${uid}-leather-cushion)`} stroke="#100703" strokeWidth="1" />
-            <rect x="46" y="366" width="188" height="32" rx="2" fill="none" stroke="#D9A377" strokeOpacity="0.35" strokeWidth="0.8" strokeDasharray="3.5 2.5" />
-          </g>
-        ) : (
-          // Nero Marquina Polished Black Marble
-          <g>
-            {/* Top Beveled Chamfer Plate */}
-            <polygon
-              points="48,348 232,348 242,362 38,362"
-              fill={`url(#${uid}-marble-bevel)`}
-              stroke="#383C44"
-              strokeWidth="0.8"
-            />
-            {/* Specular Edge Highlight */}
-            <line x1="49" y1="349" x2="231" y2="349" stroke="#FFFFFF" strokeOpacity="0.85" strokeWidth="1" />
-
-            {/* Front Marble Block Face */}
-            <rect
-              x="38"
-              y="362"
-              width="204"
-              height="40"
-              rx="1.5"
-              fill={`url(#${uid}-marble-face)`}
-              stroke="#070708"
-              strokeWidth="1"
-            />
-
-            {/* Hand-Detailed White Calcite Marble Veins */}
-            <path
-              d="M52,398 Q72,382 105,388 T152,374 T198,382"
-              fill="none"
-              stroke="#FFFFFF"
-              strokeOpacity="0.3"
-              strokeWidth="0.9"
-              filter="blur(0.3px)"
-            />
-            <path
-              d="M60,400 Q80,386 112,390"
-              fill="none"
-              stroke="#FFFFFF"
-              strokeOpacity="0.15"
-              strokeWidth="0.6"
-            />
-            <path
-              d="M174,372 Q194,379 224,376"
-              fill="none"
-              stroke="#FFFFFF"
-              strokeOpacity="0.22"
-              strokeWidth="0.7"
-            />
-          </g>
-        )}
-
-        {/* 4. INSET BRUSHED BRASS / RHODIUM REFERENCE PLAQUE */}
-        <g>
-          {/* Recessed Plaque Border */}
-          <rect
-            x="76"
-            y="369"
-            width="128"
-            height="24"
-            rx="2.5"
-            fill={`url(#${uid}-brass-plaque)`}
-            stroke="#402B08"
-            strokeWidth="0.6"
-            style={{
-              filter: active ? "drop-shadow(0 0 6px rgba(245, 158, 11, 0.4))" : undefined,
-            }}
-          />
-          {/* Top highlight line */}
-          <line x1="78" y1="370.5" x2="202" y2="370.5" stroke="#FFFFFF" strokeOpacity="0.6" strokeWidth="0.8" />
-
-          {/* Micro horology screws at the plaque corners */}
-          <circle cx="81.5" cy="374" r="1.1" fill="#4B330B" />
-          <circle cx="81.5" cy="374" r="0.7" fill="#ECCB73" />
-          <line x1="80.8" y1="374" x2="82.2" y2="374" stroke="#4B330B" strokeWidth="0.3" />
-
-          <circle cx="198.5" cy="374" r="1.1" fill="#4B330B" />
-          <circle cx="198.5" cy="374" r="0.7" fill="#ECCB73" />
-          <line x1="197.8" y1="374" x2="199.2" y2="374" stroke="#4B330B" strokeWidth="0.3" />
-
-          <circle cx="81.5" cy="387.5" r="1.1" fill="#4B330B" />
-          <circle cx="81.5" cy="387.5" r="0.7" fill="#ECCB73" />
-          <line x1="80.8" y1="387.5" x2="82.2" y2="387.5" stroke="#4B330B" strokeWidth="0.3" />
-
-          <circle cx="198.5" cy="387.5" r="1.1" fill="#4B330B" />
-          <circle cx="198.5" cy="387.5" r="0.7" fill="#ECCB73" />
-          <line x1="197.8" y1="387.5" x2="199.2" y2="387.5" stroke="#4B330B" strokeWidth="0.3" />
-
-          {/* Micro-Engraved Brand & Reference */}
-          <text
-            x="140"
-            y="379"
-            fontFamily="monospace"
-            fontSize="6.8"
-            fontWeight="bold"
-            letterSpacing="0.16em"
-            fill="#1A1204"
-            textAnchor="middle"
-          >
-            {brand.toUpperCase()}
-          </text>
-          <text
-            x="140"
-            y="388"
-            fontFamily="monospace"
-            fontSize="5.6"
-            letterSpacing="0.08em"
-            fill="#3B2909"
-            textAnchor="middle"
-          >
-            {reference ?? "HAUTE HORLOGERIE"}
-          </text>
-        </g>
-      </g>
-    </svg>
+      {/* 2. Precision Laser-Engraved Plaque Overlay */}
+      <div
+        className="pointer-events-none absolute left-1/2 flex -translate-x-1/2 flex-col items-center justify-center text-center px-1 overflow-hidden transition-all duration-300"
+        style={{
+          top: config.plaqueTop,
+          height: config.plaqueHeight,
+          width: config.plaqueWidth,
+        }}
+      >
+        <span
+          className="w-full truncate font-mono text-[8px] sm:text-[9px] md:text-[9.5px] lg:text-[10px] font-bold uppercase tracking-[0.16em] leading-tight"
+          style={{
+            color: config.brandColor,
+            textShadow: config.textShadow,
+          }}
+        >
+          {brand}
+        </span>
+        <span
+          className="w-full truncate font-mono text-[6px] sm:text-[6.8px] md:text-[7.4px] lg:text-[7.8px] font-semibold tracking-[0.06em] leading-tight opacity-90 mt-0.5"
+          style={{
+            color: config.refColor,
+            textShadow: config.textShadow,
+          }}
+        >
+          {reference ?? "HAUTE HORLOGERIE"}
+        </span>
+      </div>
+    </div>
   );
 }
 
@@ -439,7 +242,7 @@ export function WatchRailHero({
         </div>
 
         {/* Timepieces Container with Precision Luxury Spacing */}
-        <div className="mx-auto flex w-max items-end justify-center gap-2 sm:gap-3 md:gap-3.5 lg:gap-4.5 pb-6 pt-3">
+        <div className="mx-auto flex w-max items-end justify-center gap-3 sm:gap-4 md:gap-5 lg:gap-6 pb-6 pt-3 px-4">
           {items.map((item, i) => {
             const isSelected = active === i;
             return (
@@ -451,56 +254,76 @@ export function WatchRailHero({
                   setPlaying(false);
                   setActive(i);
                 }}
-                className="group relative flex h-[340px] w-[130px] sm:h-[370px] sm:w-[145px] md:h-[400px] md:w-[155px] lg:h-[420px] lg:w-[165px] xl:h-[440px] xl:w-[172px] shrink-0 cursor-pointer flex-col items-center justify-end rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="group relative flex w-[180px] sm:w-[205px] md:w-[225px] lg:w-[245px] xl:w-[260px] shrink-0 cursor-pointer flex-col items-center justify-end rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-ring pb-1"
               >
                 {/* Visual Elevation Transition */}
                 <div
-                  className={`relative flex size-full flex-col items-center justify-end transition-all duration-500 ease-out ${
+                  className={`relative flex w-full aspect-square flex-col items-center justify-center transition-all duration-500 ease-out ${
                     isSelected
-                      ? "-translate-y-4 scale-[1.05]"
-                      : "translate-y-0 scale-100 opacity-85 hover:opacity-100 hover:-translate-y-1.5"
+                      ? "-translate-y-4 scale-[1.04]"
+                      : "translate-y-0 scale-100 opacity-90 hover:opacity-100 hover:-translate-y-1.5 hover:scale-[1.02]"
                   }`}
                 >
-                  {/* Stand SVG (Nero Marquina Marble / Cognac Leather / Platinum) */}
-                  <LuxuryBoutiqueStandSVG
-                    uid={`${uid}-${i}`}
+                  {/* Stand (Nero Marquina Marble / Cognac Leather / Platinum / Walnut) */}
+                  <LuxuryBoutiqueStand
                     theme={standTheme}
                     brand={item.brand}
                     reference={item.reference ?? item.tag}
                     active={isSelected}
                   />
 
-                  {/* High-Resolution Normalized Watch Cutout */}
-                  <div className="relative mb-[4.8rem] sm:mb-[5.2rem] md:mb-[5.6rem] lg:mb-[6rem] xl:mb-[6.3rem] size-[124px] sm:size-[138px] md:size-[148px] lg:size-[158px] xl:size-[165px] flex items-center justify-center pointer-events-none">
+                  {/* Timepiece Seated on Cushion */}
+                  <div
+                    className="pointer-events-none absolute left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-none"
+                    style={{
+                      width: "44%",
+                      height: "61.6%",
+                      top: "2%",
+                    }}
+                  >
+                    {/* Cushion Ambient Contact Occlusion Shadow */}
+                    <img
+                      src={item.image}
+                      aria-hidden="true"
+                      alt=""
+                      className="absolute size-full select-none object-contain blur-[8px] brightness-0 opacity-65 translate-y-2.5 transition-all duration-300"
+                    />
+
+                    {/* High-Resolution Normalized Watch Cutout */}
                     <img
                       src={item.image}
                       alt={item.name}
                       draggable={false}
-                      className="size-full select-none object-contain transition-transform duration-300"
+                      className="relative size-full select-none object-contain transition-transform duration-300"
                       style={{
                         filter: isSelected
-                          ? "drop-shadow(0 20px 24px rgba(0,0,0,0.65)) drop-shadow(0 6px 8px rgba(0,0,0,0.35))"
-                          : "drop-shadow(0 14px 16px rgba(0,0,0,0.45))",
+                          ? "drop-shadow(0 18px 22px rgba(0,0,0,0.62)) drop-shadow(0 4px 6px rgba(0,0,0,0.35))"
+                          : "drop-shadow(0 10px 14px rgba(0,0,0,0.42))",
                       }}
                     />
 
-                    {/* Dynamic Sapphire Crystal Glare Sweep */}
+                    {/* Dynamic Sapphire Crystal Glare Sweep across dial */}
                     <span
-                      className={`pointer-events-none absolute inset-4 rounded-full bg-gradient-to-tr from-transparent via-white/30 to-blue-200/10 blur-[1.5px] transition-opacity duration-500 ${
-                        isSelected ? "opacity-100" : "opacity-0"
+                      className={`pointer-events-none absolute top-[16%] size-[54%] rounded-full bg-gradient-to-tr from-transparent via-white/35 to-blue-200/20 blur-[1.5px] transition-all duration-700 ${
+                        isSelected ? "opacity-100 scale-100" : "opacity-0 scale-95"
                       }`}
                     />
                   </div>
                 </div>
 
-                {/* Price Pill Below Base */}
-                <span
-                  className={`mt-2 font-mono text-[11px] sm:text-xs font-semibold transition-colors duration-300 ${
-                    isSelected ? "text-amber-500" : "text-muted-foreground"
-                  }`}
-                >
-                  {item.tag ?? item.brand}
-                </span>
+                {/* Price & Brand Sub-Pill Below Base */}
+                <div className="mt-2.5 flex flex-col items-center gap-0.5">
+                  <span
+                    className={`font-mono text-xs sm:text-[13px] font-semibold transition-colors duration-300 ${
+                      isSelected ? "text-amber-500 font-bold" : "text-muted-foreground"
+                    }`}
+                  >
+                    {item.tag ?? item.brand}
+                  </span>
+                  <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground/70">
+                    {item.brand}
+                  </span>
+                </div>
               </button>
             );
           })}

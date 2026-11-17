@@ -250,6 +250,17 @@ export default function WatchRailHeroDemo() {
             >
               Platinum Ingot
             </button>
+            <button
+              type="button"
+              onClick={() => setStandTheme("walnut-vines")}
+              className={`rounded-lg px-3 py-1 font-medium text-[11px] transition ${
+                standTheme === "walnut-vines"
+                  ? "bg-foreground text-background shadow-xs"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              American Walnut
+            </button>
           </div>
         </div>
 

@@ -214,7 +214,7 @@ export default function WatchRailHeroDemo() {
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 font-mono uppercase tracking-wider text-foreground font-semibold">
             <SlidersHorizontal className="size-3.5 text-amber-500" />
-            Stand Architecture:
+            Display Presentation:
           </span>
           <div className="flex items-center gap-1 rounded-xl border border-border bg-card p-1 shadow-xs">
             <button
@@ -230,36 +230,14 @@ export default function WatchRailHeroDemo() {
             </button>
             <button
               type="button"
-              onClick={() => setStandTheme("cognac-leather")}
+              onClick={() => setStandTheme("none")}
               className={`rounded-lg px-3 py-1 font-medium text-[11px] transition ${
-                standTheme === "cognac-leather"
+                standTheme === "none"
                   ? "bg-foreground text-background shadow-xs"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              Cognac Saddle Leather
-            </button>
-            <button
-              type="button"
-              onClick={() => setStandTheme("brushed-platinum")}
-              className={`rounded-lg px-3 py-1 font-medium text-[11px] transition ${
-                standTheme === "brushed-platinum"
-                  ? "bg-foreground text-background shadow-xs"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Platinum Ingot
-            </button>
-            <button
-              type="button"
-              onClick={() => setStandTheme("walnut-vines")}
-              className={`rounded-lg px-3 py-1 font-medium text-[11px] transition ${
-                standTheme === "walnut-vines"
-                  ? "bg-foreground text-background shadow-xs"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              American Walnut
+              Floating Vitrine (No Stand)
             </button>
           </div>
         </div>

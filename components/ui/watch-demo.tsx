@@ -173,7 +173,7 @@ export const REAL_LUXURY_WATCHES: WatchItem[] = [
 ];
 
 export default function WatchRailHeroDemo() {
-  const [standTheme, setStandTheme] = React.useState<WatchStandTheme>("nero-marquina");
+  const [standTheme, setStandTheme] = React.useState<WatchStandTheme>("none");
   const [autoplay, setAutoplay] = React.useState(true);
   const [cartCount, setCartCount] = React.useState(0);
   const [cartTotal, setCartTotal] = React.useState(0);

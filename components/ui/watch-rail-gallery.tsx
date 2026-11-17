@@ -392,10 +392,13 @@ export function WatchRailHero({
                 {/* Visual Elevation Transition */}
                 <div
                   className={`relative flex size-full flex-col items-center justify-end transition-all duration-500 ease-out ${
-                    isSelected
-                      ? "-translate-y-4 scale-[1.05]"
-                      : "translate-y-0 scale-100 opacity-85 hover:opacity-100 hover:-translate-y-1.5"
+                    !isNoStand
+                      ? isSelected
+                        ? "-translate-y-4 scale-[1.05]"
+                        : "translate-y-0 scale-100 opacity-85 hover:opacity-100 hover:-translate-y-1.5"
+                      : ""
                   }`}
+                  style={isNoStand ? { perspective: "1000px" } : undefined}
                 >
                   {/* Stand SVG (Nero Marquina Marble) */}
                   {!isNoStand && (
@@ -407,44 +410,27 @@ export function WatchRailHero({
                     />
                   )}
 
-                  {/* Floor Contact Shadow & Vitrine Reflection (No Stand mode) */}
-                  {isNoStand && (
-                    <>
-                      {/* Floor Contact Shadow */}
-                      <div
-                        aria-hidden="true"
-                        className={`pointer-events-none absolute bottom-0.5 h-3 rounded-full bg-black/60 transition-all duration-500 ease-out ${
-                          isSelected ? "w-28 opacity-45 blur-md scale-110" : "w-20 opacity-70 blur-sm scale-100"
-                        }`}
-                      />
-
-                      {/* Vitrine Mirror Floor Reflection */}
-                      <div
-                        aria-hidden="true"
-                        className="pointer-events-none absolute -bottom-[42%] left-1/2 -translate-x-1/2 select-none opacity-25 blur-[0.6px] transition-all duration-500 ease-out [mask-image:linear-gradient(to_bottom,rgba(0,0,0,0.45)_0%,transparent_60%)]"
-                        style={{
-                          transform: `translateX(-50%) scaleY(-1) ${isSelected ? "scaleX(1.05) translateY(-6px)" : "scaleX(1)"}`,
-                          width: "90%",
-                          height: "55%",
-                        }}
-                      >
-                        <img
-                          src={item.image}
-                          alt=""
-                          draggable={false}
-                          className="size-full object-contain"
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  {/* High-Resolution Normalized Watch Cutout */}
+                  {/* High-Resolution Normalized Watch Cutout with 3D Rotation (Turned 38° at rest, 0° on hover) */}
                   <div
                     className={`relative flex items-center justify-center pointer-events-none transition-all duration-500 ${
                       isNoStand
                         ? "mb-4 sm:mb-5 md:mb-6 size-[135px] sm:size-[150px] md:size-[165px] lg:size-[175px]"
                         : "mb-[4.8rem] sm:mb-[5.2rem] md:mb-[5.6rem] lg:mb-[6rem] xl:mb-[6.3rem] size-[124px] sm:size-[138px] md:size-[148px] lg:size-[158px] xl:size-[165px]"
                     }`}
+                    style={
+                      isNoStand
+                        ? {
+                            transform: isSelected
+                              ? "perspective(1000px) rotateY(0deg) scale(1.08) translateY(-14px)"
+                              : "perspective(1000px) rotateY(-38deg) scale(0.92)",
+                            transformOrigin: "center center",
+                            transition:
+                              "transform 600ms cubic-bezier(0.16, 1, 0.3, 1), opacity 450ms ease, filter 450ms ease",
+                            opacity: isSelected ? 1 : 0.8,
+                            filter: isSelected ? "brightness(1.03)" : "brightness(0.92)",
+                          }
+                        : undefined
+                    }
                   >
                     <img
                       src={item.image}
@@ -452,7 +438,11 @@ export function WatchRailHero({
                       draggable={false}
                       className="size-full select-none object-contain transition-transform duration-300"
                       style={{
-                        filter: isSelected
+                        filter: isNoStand
+                          ? isSelected
+                            ? "drop-shadow(0 12px 18px rgba(0,0,0,0.22))"
+                            : "drop-shadow(0 6px 10px rgba(0,0,0,0.12))"
+                          : isSelected
                           ? "drop-shadow(0 20px 24px rgba(0,0,0,0.65)) drop-shadow(0 6px 8px rgba(0,0,0,0.35))"
                           : "drop-shadow(0 14px 16px rgba(0,0,0,0.45))",
                       }}
@@ -460,7 +450,7 @@ export function WatchRailHero({
 
                     {/* Dynamic Sapphire Crystal Glare Sweep */}
                     <span
-                      className={`pointer-events-none absolute inset-4 rounded-full bg-gradient-to-tr from-transparent via-white/30 to-blue-200/10 blur-[1.5px] transition-opacity duration-500 ${
+                      className={`pointer-events-none absolute inset-4 rounded-full bg-gradient-to-tr from-transparent via-white/35 to-blue-200/15 blur-[1.5px] transition-opacity duration-500 ${
                         isSelected ? "opacity-100" : "opacity-0"
                       }`}
                     />
